@@ -1,9 +1,8 @@
 {
   "ExpandedNodes": [
     "",
-    "\\Routes",
-    "\\Schema"
+    "\\Routes"
   ],
-  "SelectedNode": "\\Schema\\user_schema.cs",
+  "SelectedNode": "\\Routes\\user_routes.cs",
   "PreviewInSolutionExplorer": false
 }

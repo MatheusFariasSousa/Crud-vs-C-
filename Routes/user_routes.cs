@@ -35,7 +35,7 @@ public class User_Router : ControllerBase
             _context.SaveChanges();
             return Ok(user);
         }
-        catch (Exception ex) 
+        catch (Exception ex)
         {
             return BadRequest(ex);
         }
@@ -43,34 +43,34 @@ public class User_Router : ControllerBase
     }
 
     [HttpGet]
-    public ActionResult<List<Dictionary<string, object>>> get_all() 
+    public ActionResult<List<Dictionary<string, object>>> get_all()
     {
         List<User> lista = _context.Users.ToList();
         List<Dictionary<string, object>> output = new List<Dictionary<string, object>>();
-        if (lista.Count == 0) 
+        if (lista.Count == 0)
         {
             return BadRequest("Empty");
         }
-        foreach(var item in lista)
-            
+        foreach (var item in lista)
+
         {
-            output.Add(new Dictionary<string, object> { { "id",item.Id},{ "name",item.Name } });
+            output.Add(new Dictionary<string, object> { { "id", item.Id }, { "name", item.Name } });
 
         }
         return Ok(output);
-         
-        
+
+
     }
 
     [HttpGet("id")]
     public ActionResult<object> get_by_id(int id)
     {
         var user = _context.Users.Find(id);
-        if (user == null) 
+        if (user == null)
         {
             return BadRequest("Empty");
         }
-        return Ok(new {  Id = user.Id ,Name = user.Name  });
+        return Ok(new { Id = user.Id, Name = user.Name });
 
     }
 
@@ -119,4 +119,68 @@ public class User_Router : ControllerBase
     }
 
 
+
+    [HttpDelete]
+        public ActionResult Delete_all()
+        {
+            List<User> lista = _context.Users.ToList();
+            if (lista.Count == 0)
+            {
+                return BadRequest("Already empty");
+            }
+            foreach (User user in lista)
+            {
+                _context.Users.Remove(user);
+            }
+            try
+            {
+                _context.SaveChanges();
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+    [HttpGet("S")]
+    public ActionResult<Dictionary<string, object>> get_last_letter()
+    {
+        int cont = 0;
+        List<User> lista = _context.Users.ToList();
+        List<Dictionary<string,object>> names = new List<Dictionary<string, object>>();
+
+        if (lista.Count == 0)
+        {
+
+            return BadRequest();
+        }
+
+
+        foreach (User user in lista)
+        {
+
+            string usuario = user.Name.ToString().ToLower();
+            int lengh = usuario.Length;
+            string letter = Convert.ToString(usuario[lengh-1]);
+            Console.WriteLine(usuario);
+            Console.WriteLine(letter);
+
+
+            if (letter == "s")
+            {
+                cont++;
+                names.Add(new Dictionary<string, object> { { "id", user.Id }, { "nome", user.Name } });
+            }
+
+        }
+        if (cont == 0) 
+        {
+            return BadRequest("No names with S");
+        }
+        return Ok(names);
+    }
+    
 }
+
+
